@@ -1,0 +1,3 @@
+# Run the daemon as this user:
+# CAMO_USER=camo
+

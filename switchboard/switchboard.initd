@@ -1,0 +1,24 @@
+#!/sbin/openrc-run
+name="switchboard"
+description="todo..."
+supervisor=supervise-daemon
+SWITCHBOARD_USER=${SWITCHBOARD_USER:-nobody}
+LOGS=/var/log/switchboard.log
+LOCAL_DB=${LOCAL_DB:-yes}
+LOCAL_BEANSTALKD=${LOCAL_BEANSTALKD:-yes}
+supervise_daemon_args="-1 $LOGS -2 $LOGS"
+command="/usr/bin/php"
+command_args="/usr/share/webapps/switchboard/scripts/switchboard.php"
+command_user="$SWITCHBOARD_USER:$SWITCHBOARD_USER"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need net
+	[ "$LOCAL_DB" = "yes" ] && need mariadb
+	[ "$LOCAL_BEANSTALKD" = "yes" ] && need beanstalkd
+}
+
+start_pre() {
+	checkpath -f "$LOGS" -m 644 -o "$SWITCHBOARD_USER:$SWITCHBOARD_USER"
+}
+

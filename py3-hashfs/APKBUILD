@@ -1,0 +1,33 @@
+# Maintainer: Chimo <chimo@chromic.org>
+#
+# TODO: Run tests if applicable
+pkgname="py3-hashfs"
+_pkgname="hashfs"
+pkgver=0.7.1
+pkgrel=0
+pkgdesc="A content-addressable file management system for Python"
+url="http://hashfs.readthedocs.org/"
+arch="noarch"
+license="MIT"
+depends="
+	python3
+"
+makedepends=""
+subpackages=""
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/dgilland/hashfs/archive/v0.7.1.tar.gz
+"
+builddir="$srcdir/$_pkgname-$pkgver"
+
+build() {
+	cd "$builddir"
+	python3 setup.py build
+}
+
+package() {
+	cd "$builddir"
+	python3 setup.py install --root="$pkgdir" --prefix=/usr --optimize=1
+}
+
+sha512sums="36017aa562912a0eba89ede0af17cb445bab4f76ace51705a1b637447c644427d44b4b770d954d62342780d2b69051983c6e2ad3e4ad6857fd246a12923ae597  py3-hashfs-0.7.1.tar.gz"

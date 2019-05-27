@@ -1,0 +1,52 @@
+# Maintainer: Chimo <chimo@chromic.org>
+#
+# FIXME: Use specific commit instead of latest master so that builds are
+#        reproducible
+#
+# Optional deps:
+#  	- redis
+#	- nginx
+#	- mysql
+#	- php7-fpm
+#       - php7-pdo_mysql (?)
+#
+pkgname="aperture"
+pkgver=0.0.1
+pkgrel=0
+pkgdesc="Aperture is a Microsub server"
+url="https://github.com/aaronpk/Aperture"
+arch="noarch"
+license="Apache 2.0"
+depends="
+	php7
+	php7-ctype
+	php7-curl
+	php7-dom
+	php7-json
+	php7-mbstring
+	php7-pdo
+	php7-session
+	php7-simplexml
+	php7-tokenizer
+	php7-xml
+	php7-xmlwriter
+"
+makedepends="composer"
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/aaronpk/Aperture/archive/master.tar.gz
+"
+builddir="$srcdir/Aperture-master/aperture"
+
+build() {
+	cd "$builddir"
+	composer install
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$builddir" "$installdir"/"$pkgname"
+}
+
+sha512sums="a9888867ed4ed352971220950b951862ad64502f5763c22ae3e05c974e7a11d8c2a347434fdc000c5ead2ebce3058eee1877f041ff87efa95c9366fd49568cae  aperture-0.0.1.tar.gz"

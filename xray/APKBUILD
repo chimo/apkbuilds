@@ -1,0 +1,42 @@
+# Maintainer: Chimo <chimo@chromic.org>
+# NOTE: Opt Deps:
+# 	   - nginx
+#	   - php7-fpm
+pkgname="xray"
+pkgver="0.0.1_git20190717"
+_gitver="cc9e1bfb17781006f20290895f579d739f33b865"
+pkgrel=0
+pkgdesc="X-Ray returns structured data from any URL"
+url="https://github.com/aaronpk/XRay"
+arch="noarch"
+license="MIT"
+depends="
+	php7
+	php7-ctype
+	php7-curl
+	php7-dom
+	php7-json
+	php7-mbstring
+	php7-simplexml
+	php7-tokenizer
+	php7-xml
+"
+makedepends="composer"
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/aaronpk/XRay/archive/$_gitver.tar.gz
+"
+builddir="$srcdir/XRay-$_gitver"
+
+build() {
+	cd "$builddir"
+	composer install
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$srcdir/XRay-$_gitver" "$installdir"/"$pkgname"
+}
+
+sha512sums="4c30204034f479b51d36975881a4f756330adb2c062fa288de00e3f04f41e9056d5ad0f6b51f90628ffaf948cf868a774f767f22e7bed7dc136d048bdb6b7770  xray-0.0.1_git20190717.tar.gz"

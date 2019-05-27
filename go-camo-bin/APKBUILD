@@ -1,0 +1,36 @@
+# Maintainer: Chimo <chimo@chromic.org>
+pkgname="go-camo-bin"
+_pkgname="go-camo"
+pkgver=1.1.4
+pkgrel=0
+pkgdesc="Go secure image proxy server"
+url="https://github.com/cactus/go-camo"
+arch="x86_64"
+license="MIT"
+depends=""
+makedepends=""
+subpackages="$pkgname-openrc"
+install="$pkgname.pre-install"
+options="!check"
+source="
+	$_pkgname-$pkgver.tar.gz::https://github.com/cactus/$_pkgname/releases/download/v$pkgver/$_pkgname-$pkgver.go112.linux-amd64.tar.gz
+	go-camo-bin.initd
+	go-camo-bin.confd
+"
+builddir="$srcdir/$_pkgname-$pkgver"
+
+package() {
+	cd "$builddir"
+	install -D -m755 bin/go-camo \
+		"$pkgdir"/usr/bin/go-camo
+	install -D -m755 bin/url-tool \
+		"$pkgdir"/usr/bin/url-tool
+	install -D -m644 "$srcdir"/go-camo-bin.confd \
+		"$pkgdir"/etc/conf.d/go-camo
+	install -Dm755 "$srcdir"/go-camo-bin.initd \
+		"$pkgdir"/etc/init.d/go-camo
+}
+
+sha512sums="bcc2cf21e9801aa2bb69283e7101c0161d4fa696ca5c8b6811e41868700188d83e6991efb67824b11ecb0d3f88d5425588cc36066da9585dbc80424f095aa962  go-camo-1.1.4.tar.gz
+691e3f531edf4f9e44ac189e084d59c27cbb8a509d4bcfdf35dba8ddb574e2b669319f3cd9552e3cc33f4234973ad554aaa2ff06eabfeeb391d4a0e820e41007  go-camo-bin.initd
+c63aafae74dc7492b383a3a82410e7dee23b797d7513a81bf178f2424fc5e8fcc2f4eb90cbb771e01819d3d8396c3af17dceb3864eda5a225da112a11bc5b562  go-camo-bin.confd"

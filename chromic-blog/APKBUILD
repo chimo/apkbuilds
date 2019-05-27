@@ -1,0 +1,30 @@
+# Maintainer: Chimo <chimo@chromic.org>
+pkgname="chromic-blog"
+pkgver=0.0.1
+pkgrel=0
+pkgdesc="My blog"
+url="https://chromic.org"
+arch="noarch"
+license="Apache 2.0"
+depends="
+	nginx
+"
+makedepends="hugo"
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://code.chromic.org/chimo/chromic.org/archive/master.tar.gz
+"
+builddir="$srcdir/chromic.org"
+
+build() {
+	cd "$builddir"
+	hugo
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps/chromic.org"
+	mkdir -p "$installdir"
+	cp -r "$srcdir/chromic.org/public" "$installdir/chromic.org/"
+}
+
+sha512sums="b26ab0ea36c2bf58e883e29679e7f285a0afd26818886a4214c185a57615ccd8cdb48254b7d10440555cdc9266d795c1d6921c5834bf17b1da130d4901df64b5  chromic-blog-0.0.1.tar.gz"

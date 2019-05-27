@@ -1,0 +1,42 @@
+# Maintainer: Chimo <chimo@chromic.org>
+# FIXME: Check if this is the proper way to build a -git package.
+#	 Should we be using the `giturl` option?
+# TODO: Create a monocle user and give correct perms
+#
+# Optional deps:
+#       - 
+#
+pkgname="monocle"
+pkgver=0.0.1
+pkgrel=0
+pkgdesc="Monocle is a reader app that talks to a Microsub server"
+url="https://github.com/aaronpk/Monocle"
+arch="noarch"
+license="MIT"
+depends="
+	php7
+	php7-curl
+	php7-dom
+	php7-json
+	php7-mbstring
+	php7-session
+"
+makedepends="composer"
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/aaronpk/Monocle/archive/master.tar.gz
+"
+builddir="$srcdir/Monocle-master"
+
+build() {
+	cd "$builddir"
+	composer install
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$builddir" "$installdir"/"$pkgname"
+}
+
+sha512sums="22a8777dfa9d72a524d4d99a25799b1b0b05952a5d4bf6b0d17e2db9095f0f93dbe7413b83dbd77dc4d9b38a9d81dea35d9c6c52e935f15140db08a5e7235665  monocle-0.0.1.tar.gz"

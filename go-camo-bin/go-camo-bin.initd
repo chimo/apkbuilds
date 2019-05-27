@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+name="go-camo-bin"
+description="Go secure image proxy server service"
+supervisor=supervise-daemon
+CAMO_USER=${CAMO_USER:-camo}
+export GOCAMO_HMAC=${GOCAMO_HMAC:-changeme}
+LOGS=/var/log/go-camo.log
+supervise_daemon_args="-1 $LOGS -2 $LOGS"
+command="/usr/bin/go-camo"
+command_user="$CAMO_USER:$CAMO_USER"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	checkpath -f "$LOGS" -m 644 -o "$CAMO_USER:$CAMO_USER"
+}
+

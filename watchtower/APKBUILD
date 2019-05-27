@@ -1,0 +1,58 @@
+# Maintainer: Chimo <chimo@chromic.org>
+# FIXME: Check if this is the proper way to build a -git package.
+#	 Should we be using the `giturl` option?
+# TODO: Create a watchtower user and give correct perms.
+#
+# TODO: Needs cron running ./scripts/cron.php
+#	Print a note on how to add cron to /etc/crontabs/nobody?
+#
+# NOTE: We "need" to patch helpers.php to get PHP to connect to mariadb via
+#	unix sockets instead of TCP.
+#
+# NOTE: Opt Deps:
+#	   - mariadb
+#	   - beanstalk
+# 	   - nginx
+#	   - php7-fpm
+#          - php7-pdo_mysql
+pkgname="watchtower"
+pkgver=0.0.1
+pkgrel=0
+pkgdesc="A minimal API for watching web pages for changes, roughly speaks the WebSub protocol"
+url="https://github.com/aaronpk/Watchtower"
+arch="noarch"
+license="Apache 2.0"
+depends="
+	php7
+	php7-curl
+	php7-json
+	php7-posix
+"
+makedepends="composer"
+subpackages="$pkgname-openrc"
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/aaronpk/Watchtower/archive/master.tar.gz
+	watchtower.initd
+	watchtower.confd
+"
+builddir="$srcdir/Watchtower-master"
+
+build() {
+	cd "$builddir"
+	composer install
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$srcdir/Watchtower-master" "$installdir"/"$pkgname"
+	install -Dm755 "$srcdir"/watchtower.initd \
+		"$pkgdir"/etc/init.d/watchtower
+	install -Dm644 "$srcdir"/watchtower.confd \
+		"$pkgdir"/etc/conf.d/watchtower
+}
+
+sha512sums="2b23c1bf38fa7bce1d2fe2fd8751d5c8b511961b897032b5439019186f87c06c8b813f1bdf2167189cab39d06d7d4119005482aa65e4c77a9be84f65a646cba5  watchtower-0.0.1.tar.gz
+95b6bc7d09afc0449e9a315651510ebc88822e6956d0e22be9ddac5e3160b4cea9217dc768d2f1db861fc6b6c296bc49f22809ec8d55fd022d601cd2700b0397  watchtower.initd
+8b91611e26ba6478d63ba99df487e80f82e0b42118af8ebc649ed73ee0e14ac1d43ea010d088d89adca77c141445122a2696afef94514d27cf11446db52cb563  watchtower.confd"

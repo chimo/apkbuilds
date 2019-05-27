@@ -1,0 +1,41 @@
+# Maintainer: Chimo <chimo@chromic.org>
+# FIXME: Check if this is the proper way to build a -git package.
+#	 Should we be using the `giturl` option?
+# TODO: Create a tokens user and give correct perms.
+#
+# NOTE: Opt Deps:
+# 	   - nginx
+#	   - php7-fpm
+pkgname="indieauth-tokens"
+pkgver=0.0.1
+pkgrel=0
+pkgdesc="todo..."
+url="https://github.com/aaronpk/IndieAuth-Token-Endpoint"
+arch="noarch"
+license="Apache 2.0"
+depends="
+	php7
+	php7-curl
+	php7-dom
+	php7-json
+	php7-mbstring
+"
+makedepends="composer"
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/aaronpk/IndieAuth-Token-Endpoint/archive/master.tar.gz
+"
+builddir="$srcdir/IndieAuth-Token-Endpoint-master"
+
+build() {
+	cd "$builddir"
+	composer install
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$srcdir/IndieAuth-Token-Endpoint-master" "$installdir"/"$pkgname"
+}
+
+sha512sums="1061170c0050337ea720320ec2011ce0bfb0cba7d7041fc4aa81b4969c39c4d2ca22735d5bf09164a2bf5aff6fd964c23e6c9f9fa70b2b142fe722c893e7ae75  indieauth-tokens-0.0.1.tar.gz"
