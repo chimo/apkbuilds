@@ -1,0 +1,9 @@
+# Run the daemon as this user:
+WEBMENTION_USER=nobody
+
+# If no, use an external sql server
+# LOCAL_DB=yes
+
+# If no, use an external redis server
+# LOCAL_REDIS=yes
+

@@ -1,0 +1,28 @@
+#!/sbin/openrc-run
+name="webmention"
+description="Easily enable webmentions and pingbacks on any web page"
+supervisor=supervise-daemon
+WEBMENTION_USER=${WEBMENTION_USER:-nobody}
+LOGS=/var/log/webmention.log
+LOCAL_DB=${LOCAL_DB:-yes}
+LOCAL_REDIS=${LOCAL_REDIS:-yes}
+supervise_daemon_args="-d /usr/share/webapps/webmention.io -1 $LOGS -2 $LOGS"
+command="/bin/sh"
+command_args="/usr/share/webapps/webmention.io/start.sh"
+command_user="$WEBMENTION_USER:$WEBMENTION_USER"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+    need net
+    [ "$LOCAL_DB" = "yes" ] && need mariadb
+    [ "$LOCAL_REDIS" = "yes" ] && need redis
+}
+
+start_pre() {
+    checkpath -f "$LOGS" -m 644 -o "$WEBMENTION_USER:$WEBMENTION_USER"
+
+    export BUNDLE_PATH=/usr/share/webapps/webmention.io/vendor
+    export PATH=$PATH:/usr/share/webapps/webmention.io/vendor/bin
+    export RACK_ENV="production"
+}
+

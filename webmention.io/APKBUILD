@@ -1,0 +1,64 @@
+# Maintainer: Chimo <chimo@chromic.org>
+# NOTE: Opt Deps:
+#      - mariadb
+#      - nginx
+#      - redis
+#
+#
+# NOTE: After installing this, configure steps:
+#
+#       `cp config.yml.template config.yml`
+#       create dbUser/db
+#       `bundle exec rake db:bootstrap`
+pkgname="webmention.io"
+pkgver=0.0.1_git20190617
+_gitver="928f09e234128c0ba9411ee08a97462b22e26d00"
+pkgrel=0
+pkgdesc="Easily enable webmentions and pingbacks on any web page"
+url="https://github.com/aaronpk/webmention.io"
+arch="x86_64"
+license="BSD"
+depends="
+    libxml2
+    libxslt
+    ruby
+    ruby-bundler
+    ruby-bigdecimal
+    ruby-webrick
+"
+makedepends="build-base ruby-dev mariadb-dev libxml2-dev linux-headers"
+subpackages="$pkgname-openrc"
+options="!check"
+source="
+    $pkgname-$pkgver.tar.gz::https://github.com/aaronpk/webmention.io/archive/$_gitver.tar.gz
+    webmention.initd
+    webmention.confd
+    start.patch
+"
+builddir="$srcdir/$pkgname-$_gitver"
+
+build() {
+    cd "$builddir"
+
+    # Change 0.4.2 to 0.4.10 for mysql2 dependency
+    # for compatibility with our version of mariadb
+    sed -i -E "s/^(gem 'mysql2',\s+)'0\.4\.2'/\1'0.4.10'/" Gemfile
+
+    # Update Gemfile.lock, etc
+    BUNDLE_PATH=./vendor bundle update mysql2 --patch
+}
+
+package() {
+    installdir="$pkgdir/usr/share/webapps"
+    mkdir -p "$installdir"
+    cp -r "$srcdir/$pkgname-$_gitver" "$installdir"/"$pkgname"
+    install -Dm755 "$srcdir"/webmention.initd \
+        "$pkgdir"/etc/init.d/webmention
+    install -Dm644 "$srcdir"/webmention.confd \
+        "$pkgdir"/etc/conf.d/webmention
+}
+
+sha512sums="69c9a73d6b462b08da53a8294a9a32c7c521a548fc935d1c804b1017c4088a13f2688fd1ffecc4b3a868668742332c245d010a911ec5944d317de5ff75a5cd0c  webmention.io-0.0.1_git20190617.tar.gz
+59848c9cbd3332d303d882842aec67d7785acab3f9b8007350a2a711777cf91a201b876d727fa5fdc55a36dca64c374fc1b010cc8e610f848957bdfec0f46cdf  webmention.initd
+f61afc419ae21e52bd959da17cf0b9e86306c6971d69b71687687f0680824d01c23705d92cafaa49108c9821f133ec63c6950d2cf2e225f1298e6f34009f1aa3  webmention.confd
+141ccbf7eecd08d88dc5d3c2f2560c905811338f403dcbd917cac22686afe920803e048c2bf5693c7bc6f3f6beb8d25870c70ec82f3ae446453dfc701a89e501  start.patch"
