@@ -1,0 +1,49 @@
+# Maintainer: Chimo <chimo@chromic.org>
+#
+# TODO: Needs to be patched for mysql.sock support
+# NOTE: redis host is hardcoded to 127.0.0.1 in the app, so it's not an
+#       optional dep.
+#
+# Optional deps:
+#	- nginx
+#	- mysql
+#	- php7-fpm
+#
+pkgname="indielogin.com"
+pkgver=0.0.1_git20190722
+_gitver="c58f897b60c53f48fdc7136fb17b0c339858127f"
+pkgrel=0
+pkgdesc="Sign in with your domain name"
+url="https://github.com/aaronpk/indielogin.com"
+arch="noarch"
+license="MIT"
+depends="
+	php7
+	php7-curl
+	php7-dom
+	php7-json
+	php7-mbstring
+	php7-pdo
+	php7-pdo_mysql
+	php7-session
+	redis
+"
+makedepends="composer"
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/aaronpk/indielogin.com/archive/$_gitver.tar.gz
+"
+builddir="$srcdir/$pkgname-$_gitver"
+
+build() {
+	cd "$builddir"
+	composer install
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$builddir" "$installdir"/"$pkgname"
+}
+
+sha512sums="29fdb0916a9f6f0fcd73d0da9865d79b0f3ce49a85d445a46d8ff6658f362bc201f814143530ac0f8f892049a5314f27a920ddb8dbd66aecf9272b4ad33551d9  indielogin.com-0.0.1_git20190722.tar.gz"
