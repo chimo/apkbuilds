@@ -1,0 +1,5 @@
+#!/bin/sh
+
+addgroup -S thelounge || true
+adduser -SDH -s /sbin/nologin -g thelounge thelounge || true
+

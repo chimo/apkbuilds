@@ -1,0 +1,3 @@
+# Run the daemon as this user:
+# THELOUNGE_USER=thelounge
+

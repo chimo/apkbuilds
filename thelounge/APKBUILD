@@ -1,0 +1,47 @@
+# Maintainer: Chimo <chimo@chromic.org>
+
+pkgname="thelounge"
+pkgver=3.2.0
+pkgrel=0
+pkgdesc="Modern, responsive, cross-platform, self-hosted web IRC client"
+url="https://thelounge.chat/"
+arch="all"
+license="MIT"
+depends="
+	nodejs
+"
+makedepends="npm"
+subpackages="$pkgname-openrc"
+install="$pkgname.pre-install"
+options="!check"
+source="
+	https://registry.npmjs.org/$pkgname/-/$pkgname-$pkgver.tgz
+	thelounge.initd
+	thelounge.confd
+"
+
+package() {
+	cd "$srcdir"
+
+	export NODE_ENV=production
+
+	npm install -g --user root --prefix "$pkgdir/usr" "$pkgname-$pkgver.tgz" --cache "${srcdir}/npm-cache"
+
+	echo /etc/thelounge > "$pkgdir/usr/lib/node_modules/$pkgname/.thelounge_home"
+
+	# add default config
+	install -Dm 644 "$pkgdir/usr/lib/node_modules/$pkgname/defaults/config.js" "$pkgdir/etc/thelounge/config.js"
+
+	# Non-deterministic race in npm gives 777 permissions to random directories.
+	# See https://github.com/npm/npm/issues/9359 for details.
+	find "$pkgdir/usr" -type d -exec chmod 755 '{}' +
+
+	install -D -m644 "$srcdir"/thelounge.confd \
+		"$pkgdir"/etc/conf.d/thelounge
+	install -Dm755 "$srcdir"/thelounge.initd \
+		"$pkgdir"/etc/init.d/thelounge
+}
+
+sha512sums="c8e4b5f5bb763b497a0c602225169de8314c9831e60d5ca57c89cbb61365f587cc7e04a80bb699713edfa1f4def61b401384917da73d62c80a12d9b2c10f8c90  thelounge-3.2.0.tgz
+8c5a0a47aa8973d22fbb90407d4210d7481802799b7579de557daa10500f3dc2030d73970bb748c6b1cdf8330406693934bd589f27a6c000617d625f80e1a831  thelounge.initd
+bd30191da80fefebf6bd7b47ff274992d1dea4fcf439f4c7b86ced2909adaf9eaa0ef33d805509b8223acc3931f81ca9f14711945d5672fc19417f110b36a1e4  thelounge.confd"

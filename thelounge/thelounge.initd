@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+name="thelounge"
+description="The Lounge service"
+supervisor=supervise-daemon
+THELOUNGE_USER=${THELOUNGE_USER:-thelounge}
+LOGS=/var/log/thelounge.log
+supervise_daemon_args="-1 $LOGS -2 $LOGS"
+command="/usr/bin/thelounge start"
+command_user="$THELOUNGE_USER:$THELOUNGE_USER"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	checkpath -f "$LOGS" -m 644 -o "$THELOUNGE_USER:$THELOUNGE_USER"
+	checkpath -d "/etc/thelounge" -m 644 -o "$THELOUNGE_USER:$THELOUNGE_USER"
+}
+
