@@ -1,0 +1,21 @@
+#!/sbin/openrc-run
+name="prometheus-bin"
+description="Go secure image proxy server service"
+supervisor=supervise-daemon
+PROMETHEUS_USER=${PROMETHEUS_USER:-prometheus}
+LOGS=/var/log/prometheus.log
+supervise_daemon_args="-1 $LOGS -2 $LOGS"
+command="/usr/bin/prometheus"
+command_args="$PROMETHEUS_OPTS"
+command_user="$PROMETHEUS_USER:$PROMETHEUS_USER"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	checkpath -f "$LOGS" -m 644 -o "$PROMETHEUS_USER:$PROMETHEUS_USER"
+	checkpath -d -o "$PROMETHEUS_USER:$PROMETHEUS_USER" -m755 /var/lib/prometheus
+}
+

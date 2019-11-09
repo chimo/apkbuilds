@@ -1,0 +1,55 @@
+# Maintainer: Chimo <chimo@chromic.org>
+pkgname="prometheus-bin"
+_pkgname="prometheus"
+pkgver=2.13.1
+pkgrel=0
+pkgdesc="The Prometheus monitoring system and time series database."
+url="https://github.com/prometheus/prometheus"
+arch="x86_64"
+license="Apache 2.0"
+depends=""
+makedepends=""
+subpackages="$pkgname-openrc"
+install="$pkgname.pre-install"
+options="!check"
+source="
+	$_pkgname-$pkgver.tar.gz::https://github.com/$_pkgname/$_pkgname/releases/download/v$pkgver/$_pkgname-$pkgver.linux-amd64.tar.gz
+	$pkgname.initd
+	$pkgname.confd
+"
+builddir="$srcdir/$_pkgname-$pkgver.linux-amd64"
+
+package() {
+	cd "$builddir"
+	
+	# binaries
+	install -D -m755 prometheus \
+		"$pkgdir"/usr/bin/prometheus
+	install -D -m755 promtool \
+		"$pkgdir"/usr/bin/promtool
+	install -D -m755 tsdb \
+		"$pkgdir"/usr/bin/tsdb
+
+	# etc
+	confdir="$pkgdir"/etc/prometheus
+	mkdir -p "$confdir"
+
+	cp -r console_libraries "$confdir"
+	cp -r consoles "$confdir"
+
+	install -D -m644 prometheus.yml \
+		"$confdir"/prometheus.yml
+
+	# data
+	mkdir -p "$pkgdir"/var/lib/prometheus
+
+	# service
+	install -D -m644 "$srcdir"/prometheus-bin.confd \
+		"$pkgdir"/etc/conf.d/prometheus
+	install -Dm755 "$srcdir"/prometheus-bin.initd \
+		"$pkgdir"/etc/init.d/prometheus
+}
+
+sha512sums="42ae1133970015e5f439178e229804a247b8356b16e3dfe18cb02a0f8643ace5edc5821b5b4464916f11e5edcf5d046fd08d7891649d91e1aebca735d849601e  prometheus-2.13.1.tar.gz
+3a51b82126f284472e5d4ffc6b6011b24b34ae202e518ac1794c68366ef8857350b91e050a267a92f6cec27df77d2ffa5b1be8081efdcb3e066bfaf8da1195a7  prometheus-bin.initd
+96a386953f16dcd13690377c053205198989e604dd72ea2a91ac83805e6651f06e91b3b6e0b2e1132e3f471b350c75e7fe621f2d3a5826f16dfa247c315377d4  prometheus-bin.confd"
