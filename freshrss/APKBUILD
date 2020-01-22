@@ -1,0 +1,45 @@
+# Maintainer: Chimo <chimo@chromic.org>
+#
+# Optional deps:
+#	- nginx
+#	- php7-fpm
+#	- php7-pdo_mysql
+#	- mariadb
+#
+pkgname="freshrss"
+_pkgname="FreshRSS"
+pkgver=1.15.3
+pkgrel=0
+pkgdesc="A free, self-hostable aggregator"
+url="https://grocy.info/"
+arch="noarch"
+license="MIT"
+depends="
+	php7
+	php7-ctype
+	php7-curl
+	php7-dom
+	php7-fileinfo
+	php7-iconv
+	php7-json
+	php7-mbstring
+	php7-session
+	php7-xml
+	php7-zip
+"
+makedepends=""
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/FreshRSS/FreshRSS/archive/$pkgver.tar.gz
+"
+
+builddir="$srcdir/$_pkgname-$pkgver"
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$builddir" "$installdir"/"$_pkgname"
+	chown -R nobody:nobody "$installdir"/"$_pkgname"/data
+}
+
+sha512sums="5c887f47928bb0f16996deb2c4681baa1950e6bda0a140aebd680039a1d02c421696be9ec26b83747a71904f878dd15ef2d61464ebc20673af9fa3ebe49597a6  freshrss-1.15.3.tar.gz"
