@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+name="vikunja-api-bin"
+description=""
+supervisor=supervise-daemon
+VIKUNJA_USER=${VIKUNJA_USER:-vikunja}
+LOGS=/var/log/vikunja-api.log
+supervise_daemon_args="-1 $LOGS -2 $LOGS"
+command="/usr/bin/vikunja-api"
+command_user="$VIKUNJA_USER:$VIKUNJA_USER"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	checkpath -f "$LOGS" -m 644 -o "$VIKUNJA_USER:$VIKUNJA_USER"
+}
+

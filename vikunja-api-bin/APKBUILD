@@ -1,0 +1,41 @@
+# Maintainer: Chimo <chimo@chromic.org>
+pkgname="vikunja-api-bin"
+_pkgname="vikunja"
+pkgver=0.10
+pkgrel=0
+pkgdesc="Vikunja API"
+url="https://kolaente.dev/vikunja/api"
+arch="x86_64"
+license="GPLv3"
+depends=""
+makedepends=""
+subpackages="$pkgname-openrc"
+install="$pkgname.pre-install"
+options="!check !strip"
+source="
+	$pkgname-$pkgver.zip::https://storage.kolaente.de/$_pkgname/$pkgver/$_pkgname-$pkgver-linux-amd64-full.zip
+	vikunja-api-bin.initd
+	vikunja-api-bin.confd
+	vikunja-api-bin.pre-install
+"
+builddir="$srcdir"
+
+package() {
+	cd "$builddir"
+	install -D -m755 "$srcdir/$_pkgname-$pkgver-linux-amd64" \
+		"$pkgdir"/usr/bin/vikunja-api
+
+	install -Dm755 "$srcdir"/$pkgname.initd \
+		"$pkgdir"/etc/init.d/vikunja-api
+
+	install -Dm644 "$srcdir/config.yml" \
+		"$pkgdir"/etc/vikunja/config.yml
+
+	install -Dm644 "$srcdir"/$pkgname.confd \
+		"$pkgdir"/etc/conf.d/vikunja-api
+}
+
+sha512sums="8f652954f33cc8f9cfc1a486471f2888d7919f40f39e852e3a2dab96aafc6b9086851fb08612dc4d78d97073fe6f8e1ea8f8c5830af0091df9b3d20005260602  vikunja-api-bin-0.10.zip
+be576ec8078d4c951b32e628263d33c48ae3dd5497ba55efdd7e2458a403847109eb6aecde64bc23384041b7a795c91487711c98b4650fac81cb3e5606ad8c4c  vikunja-api-bin.initd
+d07baaae3f1d8ff569ca12dca895832c5245b9e45004ec34ec9461b38149e53903baf6597af69dd67b2dbd2892c04a017a1cff3e93e425e318ed389fc082f0db  vikunja-api-bin.confd
+9a39506a67a1d47978fecc7ce1313268c712c6f25c674a7356c9340409498b7dcd6bbf03e5d2de64948c04792fcd7356aded4bc58708933778dae6659718dd30  vikunja-api-bin.pre-install"

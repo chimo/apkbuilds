@@ -1,0 +1,26 @@
+# Maintainer: Chimo <chimo@chromic.org>
+pkgname="vikunja-frontend-bin"
+_pkgname="vikunja"
+pkgver=0.9
+pkgrel=0
+pkgdesc="Vikunja Frontend"
+url="https://vikunja.io"
+arch="noarch"
+license="GPLv3"
+depends=""
+makedepends=""
+options="!check"
+source="
+	$pkgname-$pkgver.zip::https://storage.kolaente.de/vikunja-frontend/vikunja-frontend-0.9.zip
+"
+builddir="$srcdir"
+
+package() {
+	rm "$builddir/$pkgname-$pkgver.zip"
+
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$builddir" "$installdir/$_pkgname"
+}
+
+sha512sums="489d8488e4b8129a818e867912b2b9d10e90259b5db7e8bd81fb7730f6564a778ec2b0e819db279e9d8d821b382597720cb56566b86f3ba9a2e1face3a73cdc2  vikunja-frontend-bin-0.9.zip"
