@@ -1,0 +1,45 @@
+# Maintainer: Chimo <chimo@chromic.org>
+
+pkgname="gnu-social"
+pkgver=0.0.1_git20200421
+_gitver="872bb1388d6eb447662a30e8995c029f39670b6c"
+pkgrel=0
+pkgdesc="Social communication software used in federated social networks"
+url="https://notabug.org/diogo/gnu-social"
+arch="noarch"
+license="AGPL"
+depends="
+    mariadb
+    php7
+    php7-bcmath
+    php7-ctype
+    php7-curl
+    php7-dom
+    php7-exif
+    php7-gd
+    php7-gettext
+    php7-gmp
+    php-intl
+    php-json
+    php7-mbstring
+    php7-mysqli
+    php7-opcache
+    php7-openssl
+    php7-session
+    php7-simplexml
+    php7-xml
+    php7-xmlwriter
+"
+
+options="!check"
+source="
+    $pkgname-$pkgver.tar.gz::https://notabug.org/diogo/$pkgname/archive/$_gitver.tar.gz
+"
+
+package() {
+    installdir="$pkgdir/usr/share/webapps"
+    mkdir -p "$installdir"
+    cp -r "$srcdir/$pkgname" "$installdir"/"$pkgname"
+}
+
+sha512sums="e377fdae70b010e52b8bb89b6ebdd53e7616b232ee3ea59db4dc63c068fca315cf4da2ace8ed38307d1a3bc88bc96eab6451635ea1da6c7bdecdf3cc90bc368e  gnu-social-0.0.1_git20200421.tar.gz"
