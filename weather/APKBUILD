@@ -3,8 +3,8 @@
 # 	   - nginx
 #	   - php7-fpm
 pkgname="weather"
-pkgver="0.0.1_git20190923"
-_gitver="3d338358e9b2786cb70432d99c6dc6d067b5d873"
+pkgver="0.0.1_git20211223"
+_gitver="436ab9f21bb4354cebd36c79dde18f3d2f371451"
 pkgrel=0
 pkgdesc="Weather endpoint for Environment Canada data"
 url="https://github.com/chimo/weather"
@@ -39,4 +39,4 @@ package() {
 	cp -r "$srcdir/weather-$_gitver" "$installdir"/"$pkgname"
 }
 
-sha512sums="5cac48bc279e006f7a943495487adad2147e7c0d8689cccfb7a58bf895be026636c10e9ecc1a5d8440c01862f1872dc7c0e9b07271d324196a5fe2d677f63b85  weather-0.0.1_git20190923.tar.gz"
+sha512sums="a63b259f737d6d17573843128230d98bdc8c6f26736d1c096185722794f6a56cdb5bf16fafdb0d5c71f6026beeb62fc6ab2bd667f86842c7597124c5e29ff642  weather-0.0.1_git20211223.tar.gz"
