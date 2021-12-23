@@ -8,7 +8,7 @@
 #
 pkgname="freshrss"
 _pkgname="FreshRSS"
-pkgver=1.15.3
+pkgver=1.18.1
 pkgrel=0
 pkgdesc="A free, self-hostable aggregator"
 url="https://grocy.info/"
@@ -42,4 +42,4 @@ package() {
 	chown -R nobody:nobody "$installdir"/"$_pkgname"/data
 }
 
-sha512sums="5c887f47928bb0f16996deb2c4681baa1950e6bda0a140aebd680039a1d02c421696be9ec26b83747a71904f878dd15ef2d61464ebc20673af9fa3ebe49597a6  freshrss-1.15.3.tar.gz"
+sha512sums="4bd7d7644276bca38b64e25ee8696abd5b48ddb7d0c66e028f5368914f61a54062498d7eb19b45d25e2c9ebaaf0d74cf7e5309bb262d572334cf6a8f782bcce9  freshrss-1.18.1.tar.gz"
