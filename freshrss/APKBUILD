@@ -3,29 +3,30 @@
 # Optional deps:
 #	- nginx
 #	- php7-fpm
-#	- php7-pdo_mysql
-#	- mariadb
+#	- php7-pdo_pgsql
+#	- postgresql14
 #
 pkgname="freshrss"
 _pkgname="FreshRSS"
-pkgver=1.18.1
+pkgver=1.20.0
 pkgrel=0
 pkgdesc="A free, self-hostable aggregator"
 url="https://grocy.info/"
 arch="noarch"
 license="MIT"
 depends="
-	php7
-	php7-ctype
-	php7-curl
-	php7-dom
-	php7-fileinfo
-	php7-iconv
-	php7-json
-	php7-mbstring
-	php7-session
-	php7-xml
-	php7-zip
+	php8
+	php8-ctype
+	php8-curl
+	php8-dom
+	php8-fileinfo
+	php8-iconv
+	php8-json
+	php8-mbstring
+	php8-session
+	php8-simplexml
+	php8-xml
+	php8-zip
 "
 makedepends=""
 options="!check"
@@ -42,4 +43,6 @@ package() {
 	chown -R nobody:nobody "$installdir"/"$_pkgname"/data
 }
 
-sha512sums="4bd7d7644276bca38b64e25ee8696abd5b48ddb7d0c66e028f5368914f61a54062498d7eb19b45d25e2c9ebaaf0d74cf7e5309bb262d572334cf6a8f782bcce9  freshrss-1.18.1.tar.gz"
+sha512sums="
+335bc471950ac150ee3e1a56504ce6111c29497ec1bc5d5eb44b263a8b8aadb701c20ad56578caacc4493ce70dfd8c6f88ff0cec87a9542d444b6a0648fe8561  freshrss-1.20.0.tar.gz
+"
