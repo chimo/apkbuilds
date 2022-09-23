@@ -1,0 +1,11 @@
+--- ./darkhttpd.c
++++ ./darkhttpd.c.new
+@@ -307,7 +307,7 @@
+ static char *auth_key = NULL;
+ static uint64_t num_requests = 0, total_in = 0, total_out = 0;
+ static int accepting = 1;           /* set to 0 to stop accept()ing */
+-static int syslog_enabled = 0;
++static int syslog_enabled = 1;
+ static volatile int running = 1; /* signal handler sets this to false */
+ 
+ #define INVALID_UID ((uid_t) -1)
