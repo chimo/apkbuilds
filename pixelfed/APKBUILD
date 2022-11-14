@@ -1,0 +1,67 @@
+# Maintainer: Chimo <chimo@chromic.org>
+#
+# Optional deps:
+#  	- redis
+#	- nginx
+#	- mysql/postgresql
+#
+pkgname="pixelfed"
+pkgver=0.11.4
+pkgrel=0
+pkgdesc="A free and ethical photo sharing platform, powered by ActivityPub federation."
+url="https://github.com/pixelfed/pixelfed"
+arch="noarch"
+license="AGPL"
+depends="
+	ffmpeg
+	jpegoptim
+	libgd
+	optipng
+	php8
+	php8-bcmath
+	php8-ctype
+	php8-curl
+	php8-dom
+	php8-fileinfo
+	php8-fpm
+	php8-exif
+	php8-gd
+	php8-iconv
+	php8-intl
+	php8-json
+	php8-mbstring
+	php8-openssl
+	php8-pcntl
+	php8-pdo_pgsql
+	php8-pecl-imagick
+	php8-posix
+	php8-redis
+	php8-simplexml
+	php8-sodium
+	php8-tokenizer
+	php8-xml
+	php8-xmlwriter
+	php8-zip
+	pngquant
+"
+makedepends="composer"
+options="!check"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/pixelfed/pixelfed/archive/refs/tags/v0.11.4.tar.gz
+"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	cd "$builddir"
+	composer install
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$builddir" "$installdir"/"$pkgname"
+}
+
+sha512sums="
+0ee75071c68fcbef532a754d800d283ed7db945c2d0fbc96300ad4a15be65c96eb6dac23155aed2a91bd1e05151ff5069fae0f61396f2a049e30dbe858af80dc  pixelfed-0.11.4.tar.gz
+"
