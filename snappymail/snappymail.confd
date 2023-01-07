@@ -1,0 +1,6 @@
+# Config file for /etc/init.d/snappymail
+
+name="SnappyMail"
+user="snappymail"
+group="www-data"
+

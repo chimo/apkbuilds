@@ -1,0 +1,73 @@
+# Maintainer: Chimo <chimo@chromic.org>
+#
+pkgname="snappymail"
+pkgver=2.24.4
+pkgrel=2
+pkgdesc="Simple, modern, lightweight & fast web-based email client."
+url="https://snappymail.eu/"
+arch="noarch"
+license="AGPL-3.0-only"
+_php=php81
+_php_mods="
+	-dom
+	-xml
+	-mbstring
+	-openssl
+	-zlib
+"
+depends="
+	$_php
+	${_php_mods//-/$_php-}
+"
+install="
+	$pkgname.pre-install
+"
+subpackages="
+	$pkgname-openrc
+"
+options="!check"
+pkgusers="snappymail"
+pkggroups="www-data"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/the-djmaze/snappymail/releases/download/v$pkgver/snappymail-$pkgver.tar.gz
+	fpm-pool.conf
+	snappymail.confd
+"
+
+openrc() {
+	pkgdesc="Init script that runs SnappyMail with php-fpm"
+	depends="$pkgname $_php-fpm"
+
+	local confdir="$subpkgdir/etc/$_php/php-fpm.d"
+	local fpm_name="php-fpm${_php#php}"
+
+	install -m 644 -D "$srcdir"/fpm-pool.conf "$confdir"/$pkgname.conf
+	install -m 644 -D "$srcdir"/$pkgname.confd "$subpkgdir"/etc/conf.d/$pkgname
+
+	mkdir -p "$subpkgdir"/etc/init.d
+	ln -s $fpm_name "$subpkgdir"/etc/init.d/$pkgname
+}
+
+package() {
+  # directories
+  install -vdm755 -g www-data \
+    "$pkgdir/usr/share/webapps/snappymail" \
+    "$pkgdir/var/lib/snappymail"
+
+  # application files
+  cp -rv "$srcdir/snappymail" "$pkgdir/usr/share/webapps/snappymail"
+  install -vDm644 -g www-data -t "$pkgdir/usr/share/webapps/snappymail" \
+    "$srcdir/index.php" \
+    "$srcdir/_include.php" \
+    "$srcdir/serviceworker.js" \
+    "$srcdir/.htaccess"
+
+  # data files
+  cp -rv "$srcdir/data" "$pkgdir/var/lib/snappymail"
+}
+
+sha512sums="
+5fb65998a21dee25b59d5ed93f44173134ad540530bcf23d2593ff3ff8a944828bbbd1dab0ae7bcb4283674012a74868126391529597c16b4c9638ccff3ac59b  snappymail-2.24.4.tar.gz
+4e1317ec8c083e12700a69ac1a4169dc70455d32c631150c3b0f127dd59b7feafccf211c6fb5d0558ceb96d5f594710bd967713b37c46723df93489194186c87  fpm-pool.conf
+fa42eafa576f887e422255dd31125eaffdb228e6441d2d4111d36848a4c8677df61e2b75c1cf4fa935871bdafb892776bae55ddd0ea2bf033dd137a8a6df0cef  snappymail.confd
+"
