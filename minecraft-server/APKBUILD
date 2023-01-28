@@ -1,0 +1,40 @@
+# Maintainer: Chimo <chimo@chromic.org>
+
+pkgname="minecraft-server"
+pkgver=1.19.3
+_nonce=c9df48efed58511cdd0213c56b9013a7b5c9ac1f
+pkgrel=8
+pkgdesc="Minecraft Server"
+url="https://minecraft.net"
+arch="noarch"
+license="custom"
+depends="openjdk17-jre-headless"
+install="$pkgname.pre-install"
+subpackages="$pkgname-openrc"
+options="!check"
+pkgusers="minecraft"
+pkggroups="minecraft"
+source="
+	minecraft_server.${pkgver}.jar"::"https://launcher.mojang.com/v1/objects/${_nonce}/server.jar
+	minecraft-server.initd
+"
+
+_server_root="/usr/bin"
+
+openrc() {
+	pkgdesc="Minecraft server init script"
+	depends="$pkgname"
+
+	install -m 755 -D "$srcdir/$pkgname.initd" \
+		"$subpkgdir"/etc/init.d/$pkgname
+}
+
+package() {
+	install -Dm644 ${srcdir}/minecraft_server.${pkgver}.jar "${pkgdir}${_server_root}/minecraft_server"
+	install -o minecraft -g minecraft -d "$pkgdir"/var/lib/minecraft
+}
+
+sha512sums="
+1a3b9930df515cb8b8be9a212c2b3b6bb4612968aca5f5bb00a15eb70bff126bf96f51aa5c6661fae0b16eef629843103c6ae73cf6f2c8030314b82d2a03a189  minecraft_server.1.19.3.jar
+c28b79c114107f551d05d38068928d7774a88d9ce4825771f77b5d77cfdee1bf251b2f58af88480908a944bc74c4203892d6dbcc15c7905840c85c14ccbfb350  minecraft-server.initd
+"

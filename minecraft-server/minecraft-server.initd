@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+name="minecraft-server"
+description="Minecraft Server"
+supervisor=supervise-daemon
+LOGS=/var/log/minecraft-server.log
+supervise_daemon_args="-1 $LOGS -2 $LOGS --chdir /var/lib/minecraft"
+command="/usr/bin/java"
+command_args="-Xms512M -Xmx1024M -jar /usr/bin/minecraft_server --nogui"
+command_user="minecraft:minecraft"
+pidfile="/run/minecraft-server.pid"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	checkpath -f "$LOGS" -m 644 -o "minecraft:minecraft"
+}
+

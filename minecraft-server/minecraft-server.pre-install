@@ -1,0 +1,5 @@
+#!/bin/sh
+
+addgroup -S minecraft 2>/dev/null || true
+adduser -S -D -H -h /var/lib/minecraft -s /sbin/nologin -g minecraft minecraft 2>/dev/null || true
+
