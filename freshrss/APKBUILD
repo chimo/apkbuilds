@@ -8,25 +8,25 @@
 #
 pkgname="freshrss"
 _pkgname="FreshRSS"
-pkgver=1.20.2
+pkgver=1.21.0
 pkgrel=0
 pkgdesc="A free, self-hostable aggregator"
 url="https://grocy.info/"
 arch="noarch"
 license="MIT"
 depends="
-	php8
-	php8-ctype
-	php8-curl
-	php8-dom
-	php8-fileinfo
-	php8-iconv
-	php8-json
-	php8-mbstring
-	php8-session
-	php8-simplexml
-	php8-xml
-	php8-zip
+	php81
+	php81-ctype
+	php81-curl
+	php81-dom
+	php81-fileinfo
+	php81-iconv
+	php81-json
+	php81-mbstring
+	php81-session
+	php81-simplexml
+	php81-xml
+	php81-zip
 "
 makedepends=""
 options="!check"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-87437ab7d275c4911e58d16136431749b8e090a00ab73115239d79e32043357d36c0415bb3936268a68ec94df3fbd28596d95153b57c37bccb3867010a9ae73a  freshrss-1.20.2.tar.gz
+a36fd73367c12deb67bdc3b4d79ac53607528e9acc06f08909eb14a5134f63b0050f7fc0099b17707dbb8b5f1d9c757a28ed1c4a6b762c27a3391696ce45f7b4  freshrss-1.21.0.tar.gz
 "
