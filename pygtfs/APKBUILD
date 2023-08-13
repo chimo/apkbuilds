@@ -1,12 +1,13 @@
 # Maintainer: Chimo <chimo@chromic.org>
 pkgname="pygtfs"
-pkgver=0.0.1
-_pkgver="7db3911010306adf862efbeeec47fcef99b015c8"
+pkgver=0.1.9
+_pkgver="9fd9b9f21c3499a2522e79136da1bc514eedcd45"
 pkgrel=0
 pkgdesc="A python (2/3) library for GTFS"
 url="https://github.com/jarondl/pygtfs"
 arch="noarch"
 license="MIT"
+options="!check"
 depends="
 	python3
 	py3-docopt
@@ -15,7 +16,7 @@ depends="
 	py3-sqlalchemy
 	py3-tz
 "
-makedepends=""
+makedepends="py3-setuptools py3-pip"
 subpackages=""
 ioptions="!check"
 _giturl="https://github.com/jarondl/pygtfs.git"
