@@ -1,25 +1,25 @@
 # Maintainer: Chimo <chimo@chromic.org>
 # NOTE: Opt Deps:
 # 	   - nginx
-#	   - php7-fpm
+#	   - php81-fpm
+#	   - postgresql
+#	   - postgis
 pkgname="weather"
-pkgver="0.0.1_git20211223"
-_gitver="436ab9f21bb4354cebd36c79dde18f3d2f371451"
-pkgrel=0
+pkgver="0.0.1_git20230812"
+_gitver="3a41c5a94f58ddbf2f286ee613d23809b70fc523"
+pkgrel=2
 pkgdesc="Weather endpoint for Environment Canada data"
 url="https://github.com/chimo/weather"
 arch="noarch"
 license="AGPL"
 depends="
-	php7
-	php7-json
-	php7-mbstring
-	php7-openssl
-	php7-pdo
-	php7-pdo_pgsql
-	php7-simplexml
-	postgresql
-	postgis
+	php81
+	php81-json
+	php81-mbstring
+	php81-openssl
+	php81-pdo
+	php81-pdo_pgsql
+	php81-simplexml
 "
 makedepends="composer"
 options="!check"
@@ -39,4 +39,6 @@ package() {
 	cp -r "$srcdir/weather-$_gitver" "$installdir"/"$pkgname"
 }
 
-sha512sums="a63b259f737d6d17573843128230d98bdc8c6f26736d1c096185722794f6a56cdb5bf16fafdb0d5c71f6026beeb62fc6ab2bd667f86842c7597124c5e29ff642  weather-0.0.1_git20211223.tar.gz"
+sha512sums="
+ca04fe85a7933f15ce199b73e69ae069b5ed08410cadd02e575d554a857ef2055dbcacf1dca016ab5353f57d6576b0b2c68cf78242c58af2de4b372b06fbfc0a  weather-0.0.1_git20230812.tar.gz
+"
