@@ -1,7 +1,7 @@
 # Maintainer: Chimo <chimo@chromic.org>
 # NOTE: Opt Deps:
 # 	   - nginx
-#	   - php7-fpm
+#	   - php81-fpm
 
 # We need setuptools to install pygtfs, which is needed to convert
 # gtfs.txt to sql
@@ -10,30 +10,29 @@
 # NOTE: py3-psycopg2 is an additional dep for Postgres support
 
 pkgname="gtfs"
-pkgver="0.0.1_git20190712"
-_gitver="3d338358e9b2786cb70432d99c6dc6d067b5d873"
+pkgver="0.0.1_git20230813"
+_gitver="0cbe2b91d51c0ae31f3ef7e7f195b967b2652f83"
 pkgrel=0
 pkgdesc="GTFS thingy"
 url="https://github.com/chimo/gtfs"
 arch="noarch"
 license="AGPL"
 depends="
-	php7
-	php7-pdo
-	php7-pdo_pgsql
-	postgresql
+	php81
+	php81-pdo
+	php81-pdo_pgsql
 "
-makedepends="composer"
+makedepends=""
 options="!check"
 source="
 	$pkgname-$pkgver.tar.gz::https://github.com/chimo/gtfs/archive/$_gitver.tar.gz
 "
-builddir="$srcdir/gtfs-$_gitver"
+#builddir="$srcdir/gtfs-$_gitver"
 
-build() {
-	cd "$builddir/private"
-	composer install
-}
+#build() {
+#	cd "$builddir/private"
+#	composer install
+#}
 
 package() {
 	installdir="$pkgdir/usr/share/webapps"
@@ -41,4 +40,6 @@ package() {
 	cp -r "$srcdir/gtfs-$_gitver" "$installdir"/"$pkgname"
 }
 
-sha512sums="5cac48bc279e006f7a943495487adad2147e7c0d8689cccfb7a58bf895be026636c10e9ecc1a5d8440c01862f1872dc7c0e9b07271d324196a5fe2d677f63b85  weather-0.0.1_git20190923.tar.gz"
+sha512sums="
+9c93df66175be72bfc6590b09b7ce35c15da56c286751486886b2682880aaa6a12704c6c083b1f9251bf6b1fd8b2ea1fb037d2f42bb3b66d7488586aa270a140  gtfs-0.0.1_git20230813.tar.gz
+"
