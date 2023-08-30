@@ -1,0 +1,6 @@
+# Config file for /etc/init.d/ulogger-server
+
+name="ulogger"
+user="ulogger"
+group="www-data"
+
