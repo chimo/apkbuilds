@@ -1,0 +1,29 @@
+# Maintainer: Chimo <chimo@chromic.org>
+#
+pkgname="mopidy-iris"
+_pkgname="Iris"
+pkgver=3.68.0
+pkgrel=1
+pkgdesc="Iris is a Mopidy frontend extension."
+url="https://github.com/jaedb/Iris"
+arch="noarch"
+license="Apache 2.0"
+depends="
+	mopidy
+	python3
+"
+makedepends="py3-setuptools"
+checkdepends="py3-pytest"
+options="!check" # TODO
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/jaedb/iris/archive/$pkgver/iris-$pkgver.tar.gz
+"
+
+package() {
+	cd "$srcdir/$_pkgname-$pkgver"
+	python3 setup.py install --skip-build --root="$pkgdir"
+}
+
+sha512sums="
+e24afc2b35e2b38a46301152746b2f269b8e10b673aae5ea8fa51d4ea88105a2b636e6e5ba1afe184d6c8887481d662d55242f088a9ffecae806cca324c1008d  mopidy-iris-3.68.0.tar.gz
+"
