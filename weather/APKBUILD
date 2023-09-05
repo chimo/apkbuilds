@@ -7,19 +7,19 @@
 pkgname="weather"
 pkgver="0.0.1_git20230812"
 _gitver="3a41c5a94f58ddbf2f286ee613d23809b70fc523"
-pkgrel=2
+pkgrel=3
 pkgdesc="Weather endpoint for Environment Canada data"
 url="https://github.com/chimo/weather"
 arch="noarch"
 license="AGPL"
 depends="
-	php81
-	php81-json
-	php81-mbstring
-	php81-openssl
-	php81-pdo
-	php81-pdo_pgsql
-	php81-simplexml
+	php82
+	php82-json
+	php82-mbstring
+	php82-openssl
+	php82-pdo
+	php82-pdo_pgsql
+	php82-simplexml
 "
 makedepends="composer"
 options="!check"
