@@ -1,30 +1,43 @@
 # Maintainer: Chimo <chimo@chromic.org>
 # NOTE: Opt Deps:
-# 	   - nginx
-#	   - php81-fpm
-#	   - postgresql
 #	   - postgis
 pkgname="weather"
 pkgver="0.0.1_git20230812"
 _gitver="3a41c5a94f58ddbf2f286ee613d23809b70fc523"
-pkgrel=3
+pkgrel=5
 pkgdesc="Weather endpoint for Environment Canada data"
 url="https://github.com/chimo/weather"
 arch="noarch"
 license="AGPL"
+_php="php82"
+_php_mods="
+	-json
+	-mbstring
+	-openssl
+	-pdo
+	-pdo_pgsql
+	-simplexml
+"
+install="
+	$pkgname.pre-install
+"
 depends="
-	php82
-	php82-json
-	php82-mbstring
-	php82-openssl
-	php82-pdo
-	php82-pdo_pgsql
-	php82-simplexml
+	$_php
+	${_php_mods//-/$_php-}
+	nginx
 "
 makedepends="composer"
+subpackages="
+	$pkgname-openrc
+	$pkgname-pgsql
+"
 options="!check"
+pkgusers="weather"
+pkggroups="www-data"
 source="
 	$pkgname-$pkgver.tar.gz::https://github.com/chimo/weather/archive/$_gitver.tar.gz
+	fpm-pool.conf
+	weather.confd
 "
 builddir="$srcdir/weather-$_gitver"
 
@@ -33,12 +46,38 @@ build() {
 	composer install
 }
 
+pgsql() {
+	pkgdesc="weather PostgreSQL support"
+	depends="$pkgname $_php-pgsql $_php-pdo_pgsql"
+
+	mkdir -p "$subpkgdir"
+}
+
+openrc() {
+	pkgdesc="Init script that runs weather with php-fpm"
+	depends="$pkgname $_php-fpm"
+
+	local confdir="$subpkgdir/etc/$_php/php-fpm.d"
+	local fpm_name="php-fpm${_php#php}"
+
+	install -m 644 -D "$srcdir"/fpm-pool.conf "$confdir"/$pkgname.conf
+	install -m 644 -D "$srcdir"/$pkgname.confd "$subpkgdir"/etc/conf.d/$pkgname
+
+	mkdir -p "$subpkgdir"/etc/init.d
+	ln -s $fpm_name "$subpkgdir"/etc/init.d/$pkgname
+}
+
 package() {
 	installdir="$pkgdir/usr/share/webapps"
 	mkdir -p "$installdir"
 	cp -r "$srcdir/weather-$_gitver" "$installdir"/"$pkgname"
+
+	install -d -m 775 -o weather -g www-data \
+		$pkgdir/var/log/$pkgname
 }
 
 sha512sums="
 ca04fe85a7933f15ce199b73e69ae069b5ed08410cadd02e575d554a857ef2055dbcacf1dca016ab5353f57d6576b0b2c68cf78242c58af2de4b372b06fbfc0a  weather-0.0.1_git20230812.tar.gz
+a50c705333bfc6bee642100d45ea5f5c98cbb8f0b53e46f3d80e5a14f21de2d754a6537ad000f6c16236933fb0c542956f9dcd3c4de91a7317ccb723f84e3b10  fpm-pool.conf
+7afaebfad42621d2d250c5ff02ae49dda8fc9bec5d2e5f63d98a38641c01726de70046a9fb6c260ac8ef6f23f382ee35af797e86d1eeaff98b61cd0f4cf16f02  weather.confd
 "
