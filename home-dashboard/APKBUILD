@@ -1,0 +1,70 @@
+# Maintainer: Chimo <chimo@chromic.org>
+pkgname="home-dashboard"
+pkgver="0.0.1_git20230812"
+_gitver="cd01448239ef05f88bcf8a05bf66753b2c5156aa"
+pkgrel=2
+pkgdesc="Home dashboard"
+url="https://github.com/chimo/home-dashboard"
+arch="noarch"
+license="AGPL"
+_php="php82"
+_php_mods="
+	-curl
+	-session
+	-json
+"
+install="
+	$pkgname.pre-install
+"
+depends="
+	$_php
+	${_php_mods//-/$_php-}
+	nginx
+"
+makedepends="composer"
+subpackages="
+	$pkgname-openrc
+"
+options="!check"
+pkgusers="dashboard"
+pkggroups="www-data"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/chimo/$pkgname/archive/$_gitver.tar.gz
+	fpm-pool.conf
+	home-dashboard.confd
+"
+builddir="$srcdir/$pkgname-$_gitver"
+
+build() {
+	cd "$builddir"
+	composer install
+}
+
+openrc() {
+	pkgdesc="Init script that runs $pkgname with php-fpm"
+	depends="$pkgname $_php-fpm"
+
+	local confdir="$subpkgdir/etc/$_php/php-fpm.d"
+	local fpm_name="php-fpm${_php#php}"
+
+	install -m 644 -D "$srcdir"/fpm-pool.conf "$confdir"/$pkgname.conf
+	install -m 644 -D "$srcdir"/$pkgname.confd "$subpkgdir"/etc/conf.d/$pkgname
+
+	mkdir -p "$subpkgdir"/etc/init.d
+	ln -s $fpm_name "$subpkgdir"/etc/init.d/$pkgname
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$srcdir/$pkgname-$_gitver" "$installdir"/"$pkgname"
+
+	install -d -m 775 -o dashboard -g www-data \
+		$pkgdir/var/log/$pkgname
+}
+
+sha512sums="
+f0adbe1027d1a731a0e217bc9e6874ff32b8378a903b73b253c12bb0768c131cdfad8327ba1623171d2321d4e04c4085d3ed0f5c61b9323740c3112f8554e302  home-dashboard-0.0.1_git20230812.tar.gz
+e9a25689659d6cf118a5381f8dc3f040af346a021ba0907fb7ca60a29f139a2f3bfa1c80ab959c8c1d972532e51235d402dee0b7f5cd2605f99f1545577969c7  fpm-pool.conf
+57386e63673d76809e48e357e5145cc3da988f5dcc32f96ff85d8a30456a85b9d2aa0aac20920d0cc48fed9867ec023f83e7c9fd7241ec3e72f59fd1b54428df  home-dashboard.confd
+"
