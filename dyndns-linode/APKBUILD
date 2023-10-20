@@ -1,0 +1,70 @@
+# Maintainer: Chimo <chimo@chromic.org>
+
+pkgname="dyndns-linode"
+pkgver="0.0.1_git20231019"
+_gitver="8ef04dc77b0a32bf012c69c9a1970211e6ccd3ac"
+pkgrel=0
+pkgdesc="Update Linode DNS"
+url="https://github.com/chimo/dyndns-linode"
+arch="noarch"
+license="AGPL"
+_php="php82"
+_php_mods="
+	-curl
+	-openssl
+"
+install="
+	$pkgname.pre-install
+"
+depends="
+	$_php
+	${_php_mods//-/$_php-}
+	nginx
+"
+subpackages="
+	$pkgname-openrc
+"
+options="!check"
+pkgusers="dyndns"
+pkggroups="www-data"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/chimo/dyndns-linode/archive/$_gitver.tar.gz
+	fpm-pool.conf
+	dyndns-linode.confd
+"
+builddir="$srcdir/dyndns-linode-$_gitver"
+
+build() {
+	#cd "$builddir/private"
+	#composer install
+	echo "skip"
+}
+
+openrc() {
+	pkgdesc="Init script that runs dyndns-linode with php-fpm"
+	depends="$pkgname $_php-fpm"
+
+	local confdir="$subpkgdir/etc/$_php/php-fpm.d"
+	local fpm_name="php-fpm${_php#php}"
+
+	install -m 644 -D "$srcdir"/fpm-pool.conf "$confdir"/$pkgname.conf
+	install -m 644 -D "$srcdir"/$pkgname.confd "$subpkgdir"/etc/conf.d/$pkgname
+
+	mkdir -p "$subpkgdir"/etc/init.d
+	ln -s $fpm_name "$subpkgdir"/etc/init.d/$pkgname
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$srcdir/dyndns-linode-$_gitver" "$installdir"/"$pkgname"
+
+	install -d -m 775 -o dyndns -g www-data \
+		$pkgdir/var/log/$pkgname
+}
+
+sha512sums="
+73a48beec6a3ccb444794846a99ef5200cfa8c378aca5d7bc808fdc3975b93c423aa8088f0da30644a25712b8a29540eba3edcbc1d2ca52a0ed87058d3865ef5  dyndns-linode-0.0.1_git20231019.tar.gz
+1e56eb868c9dc413cc736411e1c0f92bfb2d26eb85c1290fb284ccdc9fdda5902915f347c42260b0ac63f996f8d3825707a5750fc70f648d51e492b1e5da5f2d  fpm-pool.conf
+6546b38d88ff8155305fc90057bc63958937e98f2f68fca8517126f578ac65ca818f9827b1d077637b96faf79927dbf35ceb03f32de2b54621886166442c133d  dyndns-linode.confd
+"
