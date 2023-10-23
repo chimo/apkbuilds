@@ -1,46 +1,44 @@
 # Maintainer: Chimo <chimo@chromic.org>
-#
-# Optional deps:
-#	- nginx
-#	- php7-fpm
-#	- php7-pdo_pgsql
-#	- postgresql14
-#
+
 pkgname="freshrss"
 _pkgname="FreshRSS"
 pkgver=1.22.0
 pkgrel=0
 pkgdesc="A free, self-hostable aggregator"
-url="https://grocy.info/"
+url="https://freshrss.org/"
 arch="noarch"
 license="MIT"
+_php="php81"
+_php_mods="
+    -ctype
+    -curl
+    -dom
+    -fileinfo
+    -iconv
+    -json
+    -mbstring
+    -session
+    -simplexml
+    -xml
+    -zip
+"
 depends="
-	php81
-	php81-ctype
-	php81-curl
-	php81-dom
-	php81-fileinfo
-	php81-iconv
-	php81-json
-	php81-mbstring
-	php81-session
-	php81-simplexml
-	php81-xml
-	php81-zip
+    $_php
+    ${_php_mods//-/$_php-}
 "
 makedepends=""
 options="!check"
 source="
-	$pkgname-$pkgver.tar.gz::https://github.com/FreshRSS/FreshRSS/archive/$pkgver.tar.gz
+    $pkgname-$pkgver.tar.gz::https://github.com/FreshRSS/FreshRSS/archive/$pkgver.tar.gz
 "
 
 builddir="$srcdir/$_pkgname-$pkgver"
 
 package() {
-	installdir="$pkgdir/usr/share/webapps"
-	mkdir -p "$installdir"
-	cp -r "$builddir" "$installdir"/"$_pkgname"
-	chown -R nobody:nobody "$installdir"/"$_pkgname"/data
+    installdir="$pkgdir/usr/share/webapps"
+    mkdir -p "$installdir"
+    cp -r "$builddir" "$installdir"/"$_pkgname"
+    chown -R nobody:nobody "$installdir"/"$_pkgname"/data
 }
 
 sha512sums="
