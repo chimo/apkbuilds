@@ -8,7 +8,7 @@
 #
 pkgname="freshrss"
 _pkgname="FreshRSS"
-pkgver=1.21.0
+pkgver=1.22.0
 pkgrel=0
 pkgdesc="A free, self-hostable aggregator"
 url="https://grocy.info/"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-a36fd73367c12deb67bdc3b4d79ac53607528e9acc06f08909eb14a5134f63b0050f7fc0099b17707dbb8b5f1d9c757a28ed1c4a6b762c27a3391696ce45f7b4  freshrss-1.21.0.tar.gz
+4f462a7b7c28beba0dc6a6ea36dc9ad60b4b95d31710ffb593ce3072b4772f1faf911e942ca9474991b30bba227a8dcf9f945935713e2de7226b53a93a4ec6c5  freshrss-1.22.0.tar.gz
 "
