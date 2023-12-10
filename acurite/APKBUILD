@@ -1,0 +1,66 @@
+# Maintainer: Chimo <chimo@chromic.org>
+
+pkgname="acurite"
+pkgver="0.0.1_git202312101438"
+_gitver="818b7dae1723caa207d0d2c72cadaeaecfef53d2"
+pkgrel=3
+pkgdesc="Acurite data relay"
+url="https://github.com/chimo/acurite"
+arch="noarch"
+license="AGPL"
+_php="php82"
+_php_mods="
+	-json
+"
+install="
+	$pkgname.pre-install
+"
+depends="
+	$_php
+	${_php_mods//-/$_php-}
+	nginx
+"
+subpackages="
+	$pkgname-openrc
+"
+options="!check"
+pkgusers="acurite"
+pkggroups="www-data"
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/chimo/$pkgname/archive/$_gitver.tar.gz
+	fpm-pool.conf
+	$pkgname.confd
+"
+builddir="$srcdir/$pkgname-$_gitver"
+
+openrc() {
+	pkgdesc="Init script that runs $pkgname with php-fpm"
+	depends="$pkgname $_php-fpm"
+
+	local confdir="$subpkgdir/etc/$_php/php-fpm.d"
+	local fpm_name="php-fpm${_php#php}"
+
+	install -m 644 -D "$srcdir"/fpm-pool.conf "$confdir"/$pkgname.conf
+	install -m 644 -D "$srcdir"/$pkgname.confd "$subpkgdir"/etc/conf.d/$pkgname
+
+	mkdir -p "$subpkgdir"/etc/init.d
+	ln -s $fpm_name "$subpkgdir"/etc/init.d/$pkgname
+}
+
+package() {
+	installdir="$pkgdir/usr/share/webapps"
+	mkdir -p "$installdir"
+	cp -r "$srcdir/$pkgname-$_gitver" "$installdir"/"$pkgname"
+
+	install -d -m 775 -o $pkgname -g www-data \
+		$pkgdir/var/lib/$pkgname
+
+	install -d -m 775 -o $pkgname -g www-data \
+		$pkgdir/var/log/$pkgname
+}
+
+sha512sums="
+fd70a9325a4a2857b27f6f631ab98660788c6a5440abbf0bd011b166d47269462daf568217afaa611d42f0c10080b6a3fdd3993de62b92262023c4b8030b3102  acurite-0.0.1_git202312101438.tar.gz
+d187e29a0553b97e19b3f429a49aa319b7943c6a549ccc5ae892ac90a6f4c9c930b811800417025613e79f37617bdcfc661388704f949bbc5a20dd95cd288563  fpm-pool.conf
+97d24ca5fcb67d976ea2eb09d99a5224d9d758d3efa1798e2f0aa040165a2434f113bfa8e5aa3197d73751ff27562ff9beae2d14792187a294dcb484ab4a2608  acurite.confd
+"
