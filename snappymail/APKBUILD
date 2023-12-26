@@ -1,7 +1,7 @@
 # Maintainer: Chimo <chimo@chromic.org>
 #
 pkgname="snappymail"
-pkgver=2.31.0
+pkgver=2.32.0
 pkgrel=1
 pkgdesc="Simple, modern, lightweight & fast web-based email client."
 url="https://snappymail.eu/"
@@ -67,7 +67,7 @@ package() {
 }
 
 sha512sums="
-5ea49ce43635ba2ba464d00ee425d976e354ebe4e01dd720450d414ac4f373aca420d3dff8f02aa5fb62cdf5e2ea5c863877663c9badf2416c3c558fdafc2161  snappymail-2.31.0.tar.gz
+dc6076a9c2babb6297d3506fcc078b6f1c775d3e70587ccd86a0c68e91d053721d71f8e9adc51cb0c62b88cd1f633bfaa04c8919edc4ac8fddb2d75508065a01  snappymail-2.32.0.tar.gz
 dae49325efb666d44d16f8cf890be1595f3baca9df532b37cf10fd27f44359bab8905b7230e5a07d721b856b6c93dcab65b0faf4fa0d0c279cb67b3f53f38877  fpm-pool.conf
 fa42eafa576f887e422255dd31125eaffdb228e6441d2d4111d36848a4c8677df61e2b75c1cf4fa935871bdafb892776bae55ddd0ea2bf033dd137a8a6df0cef  snappymail.confd
 "
