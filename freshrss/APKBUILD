@@ -2,7 +2,7 @@
 
 pkgname="freshrss"
 _pkgname="FreshRSS"
-pkgver=1.22.1
+pkgver=1.23.1
 pkgrel=0
 pkgdesc="A free, self-hostable aggregator"
 url="https://freshrss.org/"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-5ec4f0483b6ada3c0ee791d3efffd23140417bb643367cc30e309d5294031c3f6289b13f7dae400ded0ad4153233e0f87b7c1f0ba5e7a04a3231a0a865bc5ae6  freshrss-1.22.1.tar.gz
+df4c7eedf3dc8c5c9d0de722e00e3846d1bb1b1605d53a9415b5fd49715b91d6cf22f7f64503a706af32dc6f96415e28d772f7442816e76e266b4aa908984e95  freshrss-1.23.1.tar.gz
 "
