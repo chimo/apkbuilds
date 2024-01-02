@@ -1,0 +1,21 @@
+#!/sbin/openrc-run
+name="geo2tz"
+description="A self-hostable REST-like API to get the time zone from geo coordinates"
+supervisor=supervise-daemon
+LOGS=/var/log/geo2tz.log
+supervise_daemon_args="-1 $LOGS -2 $LOGS"
+_user="${GEO2TZ_USER:-geo2tz}"
+_group="${GEO2TZ_GROUP:-geo2tz}"
+command_user="${_user}:${_group}"
+command="/usr/share/webapps/geo2tz/geo2tz"
+command_args="start"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	checkpath -f "$LOGS" -m 644 -o "${_user}:${_group}"
+}
+

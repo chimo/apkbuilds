@@ -1,0 +1,7 @@
+#!/bin/sh
+
+addgroup -S geo2tz 2>/dev/null
+adduser -S -D -H -h /usr/share/webapps/geo2tz -s /sbin/nologin -G geo2tz -g geo2tz geo2tz 2>/dev/null
+
+exit 0
+

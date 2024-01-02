@@ -1,0 +1,54 @@
+# Maintainer: Chimo <chimo@chromic.org>
+
+pkgname=geo2tz
+pkgver=2.1.4
+pkgrel=2
+pkgdesc="A self-hostable REST-like API to get the time zone from geo coordinates"
+url="https://github.com/noandrea/geo2tz"
+license="MIT"
+arch="all"
+install="$pkgname.pre-install"
+subpackages="$pkgname-openrc"
+pkgusers="geo2tz"
+pkggroups="geo2tz"
+makedepends="go"
+source="
+    https://github.com/noandrea/$pkgname/archive/v$pkgver/$pkgname-$pkgver.tar.gz
+    $pkgname.initd
+    $pkgname.confd
+"
+
+export GOCACHE="${GOCACHE:-"$srcdir/go-cache"}"
+export GOTMPDIR="${GOTMPDIR:-"$srcdir"}"
+export GOMODCACHE="${GOMODCACHE:-"$srcdir/go"}"
+
+build() {
+    go build -v -o bin/$pkgname
+}
+
+package() {
+    local _user="geo2tz"
+    local _group="${_user}"
+
+    # app
+    install -Dm755 -o $_user-g $_group bin/$pkgname \
+        "$pkgdir"/usr/share/webapps/$pkgname/$pkgname
+
+    # data
+    # Shoving data at "/" is gross, but the app seems to be hardcoded
+    # to get it from there somehow...
+    install -Dm755 -o $_user -g $_group tzdata/timezone.snap.json \
+        "$pkgdir"/tzdata/timezone.snap.json
+
+    # openrc
+    install -m 644 -D "$srcdir/$pkgname.confd" \
+        "$pkgdir"/etc/conf.d/$pkgname
+    install -m 755 -D "$srcdir/$pkgname.initd" \
+        "$pkgdir"/etc/init.d/$pkgname
+}
+
+sha512sums="
+800f72fe0417f736a56e75a386d166cadd143ee478504bb0dcc5f51c7b8a2ccb86f84f44c0597bd35b8030d84bb33aa3ffb0a7b4239398607a66388470d4f663  geo2tz-2.1.4.tar.gz
+59e1b9c2fa7b2db923ee8d586906053af95bbcc46e9e74b97f029e0d3461318a4c815842661710d5903b233947c13438a103593c987b533acc9b8034a78a43e3  geo2tz.initd
+0b1ca8158aaa8fea09b28434eb448df86cccf7dad9b02f0e27e49a6f8f6890c53f0c9fc9e6cb04564167a20bde9c42006f85388d1f6dd656e6a2b3da35204958  geo2tz.confd
+"
