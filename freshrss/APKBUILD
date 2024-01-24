@@ -3,12 +3,12 @@
 pkgname="freshrss"
 _pkgname="FreshRSS"
 pkgver=1.23.1
-pkgrel=0
+pkgrel=1
 pkgdesc="A free, self-hostable aggregator"
 url="https://freshrss.org/"
 arch="noarch"
 license="MIT"
-_php="php81"
+_php="php82"
 _php_mods="
     -ctype
     -curl
