@@ -3,7 +3,7 @@
 pkgname="freshrss"
 _pkgname="FreshRSS"
 pkgver=1.23.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A free, self-hostable aggregator"
 url="https://freshrss.org/"
 arch="noarch"
@@ -22,25 +22,73 @@ _php_mods="
     -xml
     -zip
 "
+install="
+    $pkgname.pre-install
+"
+subpackages="
+    $pkgname-nginx
+    $pkgname-openrc
+    $pkgname-pgsql
+"
 depends="
     $_php
     ${_php_mods//-/$_php-}
 "
+pkgusers="freshrss"
+pkgsgroups="www-data"
 makedepends=""
 options="!check"
 source="
     $pkgname-$pkgver.tar.gz::https://github.com/FreshRSS/FreshRSS/archive/$pkgver.tar.gz
+    fpm-pool.conf
+    freshrss.confd
+    nginx.conf
 "
 
 builddir="$srcdir/$_pkgname-$pkgver"
 
+nginx() {
+    pkgdesc="FreshRSS nginx support"
+    depends="$pkgname nginx"
+
+    install -m 644 -D "$srcdir"/nginx.conf "$subpkgdir"/etc/nginx/http.d/freshrss.conf
+}
+
+pgsql() {
+    pkgdesc="FreshRSS PostgreSQL support"
+    depends="$pkgname $_php-pgsql $_php-pdo_pgsql"
+
+    mkdir -p "$subpkgdir"
+}
+
+openrc() {
+    pkgdesc="Init script that runs FreshRSS with php-fpm"
+    depends="$pkgname $_php-fpm"
+
+    confdir="$subpkgdir/etc/$_php/php-fpm.d"
+    fpm_name="php-fpm${_php#php}"
+
+    install -m 644 -D "$srcdir"/fpm-pool.conf "$confdir"/$pkgname.conf
+    install -m 644 -D "$srcdir"/$pkgname.confd "$subpkgdir"/etc/conf.d/$pkgname
+
+    mkdir -p  "$subpkgdir"/etc/init.d
+    ln -s $fpm_name "$subpkgdir"/etc/init.d/$pkgname
+}
+
 package() {
     installdir="$pkgdir/usr/share/webapps"
+
     mkdir -p "$installdir"
     cp -r "$builddir" "$installdir"/"$_pkgname"
     chown -R nobody:nobody "$installdir"/"$_pkgname"/data
+
+    install -m 775 -d -o freshrss -g www-data "$pkgdir"/var/log/$pkgname
+    install -m 775 -d -o freshrss -g www-data "$pkgdir"/var/tmp/$pkgname
 }
 
 sha512sums="
 df4c7eedf3dc8c5c9d0de722e00e3846d1bb1b1605d53a9415b5fd49715b91d6cf22f7f64503a706af32dc6f96415e28d772f7442816e76e266b4aa908984e95  freshrss-1.23.1.tar.gz
+7df93d22a1ef6e646ebf01aa1fa34e60cba8bbf2495629580809271c08b22c35d17b0573df72f6e810d077951bb642af7da461b242cc3cd828a6e09ea7cf2391  fpm-pool.conf
+304767cc14db425fdb6f0214aca8baaa92ea05e8fc767e79ec96c4d9032509c2b52cb687106dc25b291bc7150305dde0bd0a84d77b0fc8ad872d2331c458bacf  freshrss.confd
+720c6652079ae74bab1ebfe78babd9e723913da417f1c0c63e34ee2f1a619c405f9a93cd33c85b54cd30362d0f39dabbbe312131f97c37e98353150fa0e332cc  nginx.conf
 "
