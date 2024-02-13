@@ -2,12 +2,12 @@
 #
 pkgname="snappymail"
 pkgver=2.34.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Simple, modern, lightweight & fast web-based email client."
 url="https://snappymail.eu/"
 arch="noarch"
 license="AGPL-3.0-only"
-_php=php82
+_php=php83
 _php_mods="
 	-ctype
 	-dom
