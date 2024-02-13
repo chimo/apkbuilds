@@ -7,12 +7,12 @@ pkgname="ulogger-server-git"
 _pkgname="ulogger-server"
 pkgver="20240213"
 _gitver="64ae6694d5bab96802196eb790d3f01c6a5ba28c"
-pkgrel=1
+pkgrel=2
 pkgdesc="μlogger • web viewer for tracks uploaded with μlogger mobile client"
 url="https://github.com/bfabiszewski/ulogger-server"
 arch="noarch"
 license="GPLv3"
-_php="php82"
+_php="php83"
 _php_mods="
 	-ctype
 	-json
