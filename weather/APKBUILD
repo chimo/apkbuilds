@@ -2,9 +2,9 @@
 # NOTE: Opt Deps:
 #	   - postgis
 pkgname="weather"
-pkgver="0.0.1_git20230812"
-_gitver="3a41c5a94f58ddbf2f286ee613d23809b70fc523"
-pkgrel=5
+pkgver="0.0.1_git20240214"
+_gitver="5435afde98fe4e26fa64262e3dd9a4cd67a8112e"
+pkgrel=1
 pkgdesc="Weather endpoint for Environment Canada data"
 url="https://github.com/chimo/weather"
 arch="noarch"
@@ -77,7 +77,7 @@ package() {
 }
 
 sha512sums="
-ca04fe85a7933f15ce199b73e69ae069b5ed08410cadd02e575d554a857ef2055dbcacf1dca016ab5353f57d6576b0b2c68cf78242c58af2de4b372b06fbfc0a  weather-0.0.1_git20230812.tar.gz
+89dc7f958c0c21e29d3385de6cc9f2c081121918ac0c7f5b2fe5ee73ab5b0ae251d3ba9c2fbc6ecc6db922cc5b324d2c3ed50883096f9612ea91ed0c14b9d553  weather-0.0.1_git20240214.tar.gz
 a50c705333bfc6bee642100d45ea5f5c98cbb8f0b53e46f3d80e5a14f21de2d754a6537ad000f6c16236933fb0c542956f9dcd3c4de91a7317ccb723f84e3b10  fpm-pool.conf
 7afaebfad42621d2d250c5ff02ae49dda8fc9bec5d2e5f63d98a38641c01726de70046a9fb6c260ac8ef6f23f382ee35af797e86d1eeaff98b61cd0f4cf16f02  weather.confd
 "
